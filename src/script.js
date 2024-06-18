@@ -1,3 +1,5 @@
+import config from './config.js';
+const clientId = config.CLIENT_ID;
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 
