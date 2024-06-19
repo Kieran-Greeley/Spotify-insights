@@ -7,6 +7,7 @@
         <script src="config.js" type="module"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link href="style.css" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
         <h1>Display your Spotify profile data</h1>
@@ -25,6 +26,9 @@
         <section id="artists">
             <ol id="top-artists">
             </ol>
+            <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
+                <div id="artists_cards"  class="flex flex-nowrap lg:ml-5 md:ml-5 ml-5"></div>
+            </div>
             <div style="width: 800px;"><canvas id="artists-graph"></canvas></div>
         </section>
     </body>

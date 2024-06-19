@@ -88,6 +88,18 @@ async function fetchTopArtist(token){
     return await result.json();
 }
 
+function createCard(name, image){
+    let card = document.createElement("div");
+    card.className = "card"
+    let picture = document.createElement("img");
+    picture.src = image;
+    card.appendChild(picture);
+    let card_name = document.createElement("h3");
+    card_name.innerHTML = name;
+    card.appendChild(card_name);
+    document.getElementById("artists_cards").appendChild(card);
+}
+
 function populateUI(profile, artists) {
     document.getElementById("displayName").innerText = profile.display_name;
     if (profile.images[0]) {
@@ -105,14 +117,23 @@ function populateUI(profile, artists) {
 
     let artist_name = [];
     let artist_pop = [];
+    let artist_pic = [];
+    let index = 1;
     let average_pop = 0;
     for(let i of artists.items){
         artist_name.push(i.name);
         artist_pop.push(i.popularity);
-        let artist = document.createElement("li");
-        artist.innerHTML = i.name + " " + " " + i.popularity;
-        document.getElementById("top-artists").appendChild(artist);
+        artist_pic.push(i.images[0].url);
+        //let artist = document.createElement("li");
+        // artist.innerHTML = i.name;
+        // document.getElementById("top-artists").appendChild(artist);
         average_pop += i.popularity;
+        // let picture = document.createElement("img");
+        // picture.src = i.images[0].url;S
+        // document.getElementById("top-artists").appendChild(picture);
+        let name = index + ". " + i.name;
+        createCard(name, i.images[0].url);
+        index++;
     }
     average_pop = average_pop/artists.limit; 
     let avg = document.createElement("p");
