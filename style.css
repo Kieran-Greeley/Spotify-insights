@@ -1,7 +1,12 @@
 body{
-  background-color: black;
-  color: lightgray;
+  background-color: #121212;
+  color: #fff;
 }
+
+/* body.dark {
+  background-color: rgb(18, 18, 18);
+  color: rgb(255, 255, 255);
+} */
 
 div.scrollmenu {
   background-color: #333;

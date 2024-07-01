@@ -98,15 +98,23 @@ async function fetchTopTracks(token){
   return await result.json();
 }
 
-function createCard(name, image, type){
+// export function toggleDarkMode(){
+//   console.log("dark mode toggle test1");
+//   const body = document.documentElement;
+//   body.classList.toggle('dark');
+//   console.log("dark mode toggle test2");
+// }
+
+function createCard(name, image, subtext, type){
   //create padding
   const outerPadding = document.createElement('div');
   outerPadding.className = "inline-block px-2";
 
   //create card
   let card = document.createElement("div");
-  card.className = "w-64 max-w-xs bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700 overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out";
-
+  card.style.backgroundColor = "#2a2a2a";
+  card.style.borderColor = "#121212";
+  card.className = "w-64 max-w-xs rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out";
   //adding pictures to card
   let picture = document.createElement("img");
   picture.className = "rounded-t-lg";
@@ -120,8 +128,15 @@ function createCard(name, image, type){
   //adding name to card
   let card_name = document.createElement("h5");
   card_name.innerHTML = name;
-  card_name.className = "mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white";
+  card_name.className = "mb-2 text-xl font-bold tracking-tight text-white";
   innerPadding.appendChild(card_name);
+
+  // adding subtext to card
+  // const cardSubtext = document.createElement('h5');
+  // cardSubtext.innerHTML = subtext;
+  // cardSubtext.style.color = "#727272"
+  // cardSubtext.className = "mb-3 font-normal";
+  // innerPadding.appendChild(cardSubtext);
 
   card.appendChild(innerPadding);
   outerPadding.appendChild(card);
@@ -130,19 +145,27 @@ function createCard(name, image, type){
 }
 
 function populateUI(profile, artists, tracks) {
-  document.getElementById("displayName").innerText = profile.display_name;
+  //create profile box
   if (profile.images[0]) {
-    const profileImage = new Image(200, 200);
-    profileImage.src = profile.images[0].url;
-    document.getElementById("avatar").appendChild(profileImage);
-    document.getElementById("imgUrl").innerText = profile.images[0].url;
+    const img = document.createElement('img');
+    img.className = "rounded-full border-2";
+    img.src = profile.images[0].url;
+    document.getElementById("profile-box").appendChild(img);
   }
-  document.getElementById("id").innerText = profile.id;
-  document.getElementById("email").innerText = profile.email;
-  document.getElementById("uri").innerText = profile.uri;
-  document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
-  document.getElementById("url").innerText = profile.href;
-  document.getElementById("url").setAttribute("href", profile.href);
+  var profile_text = document.createElement("div");
+  var name = document.createElement("a");
+  name.innerText = profile.display_name;
+  name.href = profile.external_urls.spotify;
+  name.className = 'underline';
+  profile_text.appendChild(name);
+
+  var email = document.createElement("p");
+  email.innerText = profile.email;
+  email.style.color = "#727272";
+  email.className = 'text-sm';
+  profile_text.appendChild(email);
+
+  document.getElementById("profile-box").appendChild(profile_text);
 
   let artist_name = [];
   let artist_pop = [];
@@ -153,7 +176,7 @@ function populateUI(profile, artists, tracks) {
     artist_name.push(i.name);
     artist_pop.push(i.popularity);
     average_pop += i.popularity;
-    createCard("#" + artist_index + ": " + i.name, i.images[0].url, "artists");
+    createCard("#" + artist_index + ": " + i.name, i.images[0].url, i.genres[0], "artists");
     artist_index++;
   }
     average_pop = average_pop/artists.limit; 
@@ -177,7 +200,7 @@ function populateUI(profile, artists, tracks) {
           song_artists_dict[j.name] = 1;
         }
       }
-      createCard("#" + song_index + ": " + i.name, i.album.images[0].url, "tracks");
+      createCard("#" + song_index + ": " + i.name, i.album.images[0].url, "", "tracks");
       song_index++;
     }
     console.log(song_artists_dict);
@@ -199,7 +222,7 @@ function populateUI(profile, artists, tracks) {
           datasets: [{
             label: 'Popularity Score',
             data: artist_pop,
-            backgroundColor: 'rgba(20, 205, 86, 1)',
+            backgroundColor: 'rgba(30, 215, 96, 1)',
             borderWidth: 1
           }]
         },
@@ -262,8 +285,7 @@ function populateUI(profile, artists, tracks) {
         datasets: [{
           label: 'Popularity Score',
           data: song_pop,
-          backgroundColor: 'rgba(20, 205, 86, 1)',
-          //borderColor: 'rgb(20, 205, 86)',
+          backgroundColor: 'rgba(30, 215, 96, 1)',
           borderWidth: 1
         }]
       },
@@ -326,7 +348,7 @@ function populateUI(profile, artists, tracks) {
         datasets: [{
           label: 'Number of songs per artist',
           data: Object.values(song_artists_dict),
-          backgroundColor: 'rgba(20, 205, 86, 1)',
+          backgroundColor: 'rgba(30, 215, 96, 1)',
           //borderColor: 'rgb(20, 205, 86)',
           borderWidth: 1
         }]

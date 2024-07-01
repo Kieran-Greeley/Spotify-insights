@@ -10,34 +10,36 @@
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
     <body>
-        <h1>Display your Spotify profile data</h1>
+        <section id="profile" class="w-1/4 p-2 rounded-md" style="background-color:#2a2a2a;">
+            <div id="profile-box" class="flex items-center gap-4"></div>
+          </section>
 
-        <section id="profile">
-            <h2>Logged in as <span id="displayName"></span></h2>
-            <span id="avatar"></span>
-            <ul>
-                <li>User ID: <span id="id"></span></li>
-                <li>Email: <span id="email"></span></li>
-            <li>Spotify URI: <a id="uri" href="#"></a></li>
-                <li>Link: <a id="url" href="#"></a></li>
-            <li>Profile Image: <span id="imgUrl"></span></li>
-            </ul>
-        </section>
+        <!-- <button onclick="toggleDarkMode()" class="px-4 py-2 bg-gray-800 text-white rounded">
+            Toggle Dark Mode
+        </button> -->
+
         <section id="artists">
             <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
                 <div id="artists_cards"  class="flex flex-nowrap lg:ml-5 md:ml-5 ml-5"></div>
             </div>
             <div id="artists_avg_popularity"></div>
-            <div><canvas id="artists-popularity-bargraph"></canvas></div>
         </section>
+        <section id="artists-graphs">   
+            <div class="chart-container w-2/3"><canvas id="artists-popularity-bargraph"></canvas></div>
+        </section>
+
         <section id="tracks">
             <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
                 <div id="tracks_cards"  class="flex flex-nowrap lg:ml-5 md:ml-5 ml-5"></div>
             </div>
             <div id="tracks_avg_popularity"></div>
-            <div><canvas id="tracks-popularity-bargraph"></canvas></div>
-            <div><canvas id ="tracks-artists-barchart"></canvas></div>
-            <div><canvas id ="tracks-artists-piechart"></canvas></div>
         </section>
+
+        <section id="tracks-graphs">
+            <div class="chart-container w-2/3"><canvas id="tracks-popularity-bargraph"></canvas></div>
+            <div class="chart-container w-3/5"><canvas id ="tracks-artists-barchart"></canvas></div>
+            <div class="chart-container w-1/5"><canvas id ="tracks-artists-piechart"></canvas></div>
+        </section>
+
     </body>
 </html>
