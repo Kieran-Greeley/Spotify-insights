@@ -128,20 +128,31 @@ function createCard(name, image, subtext, type){
   //adding name to card
   let card_name = document.createElement("h5");
   card_name.innerHTML = name;
-  card_name.className = "mb-2 text-xl font-bold tracking-tight text-white";
+  card_name.className = "text-xl font-bold tracking-tight text-white";
   innerPadding.appendChild(card_name);
 
-  // adding subtext to card
-  // const cardSubtext = document.createElement('h5');
-  // cardSubtext.innerHTML = subtext;
-  // cardSubtext.style.color = "#727272"
-  // cardSubtext.className = "mb-3 font-normal";
-  // innerPadding.appendChild(cardSubtext);
+  //adding subtext to card
+  const cardSubtext = document.createElement('h5');
+  cardSubtext.innerHTML = subtext;
+  cardSubtext.style.color = "#727272"
+  cardSubtext.className = "mb-1 font-normal";
+  innerPadding.appendChild(cardSubtext);
 
   card.appendChild(innerPadding);
   outerPadding.appendChild(card);
   let type_name = type + "_cards"
   document.getElementById(type_name).appendChild(outerPadding);
+}
+
+function convertFromMilliseconds(ms){
+  let totSeconds = Math.floor(ms / 1000);
+  let minutes = Math.floor(totSeconds / 60);
+  let seconds = totSeconds % 60;
+  if (seconds < 10){
+    return minutes+":0"+seconds;
+  }else{
+    return minutes+":"+seconds;
+  }
 }
 
 function populateUI(profile, artists, tracks) {
@@ -200,7 +211,7 @@ function populateUI(profile, artists, tracks) {
           song_artists_dict[j.name] = 1;
         }
       }
-      createCard("#" + song_index + ": " + i.name, i.album.images[0].url, "", "tracks");
+      createCard("#" + song_index + ": " + i.name, i.album.images[0].url, i.artists[0].name+" "+convertFromMilliseconds(i.duration_ms), "tracks");
       song_index++;
     }
     console.log(song_artists_dict);
