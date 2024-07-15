@@ -10,14 +10,10 @@ if (!code) {
     const profile = await fetchProfile(accessToken);
     const artists = await fetchTopArtist(accessToken);
     const tracks = await fetchTopTracks(accessToken);
-    let player = await fetchPlaybackState(accessToken);
-    let queue = await fetchQueue(accessToken)
     console.log(profile);
     console.log(artists);
     console.log(tracks);
-    console.log(player);
-    console.log(queue);
-    populateUI(profile, artists, tracks, player, queue);
+    populateUI(profile, artists, tracks);
 }
 
 
@@ -31,7 +27,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:5173/callback");
-    params.append("scope", "user-read-private user-read-email user-top-read user-read-playback-state user-read-currently-playing");
+    params.append("scope", "user-read-private user-read-email user-top-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -99,20 +95,6 @@ async function fetchTopTracks(token){
   return await result.json();
 }
 
-async function fetchPlaybackState(token){
-  const result = await fetch("https://api.spotify.com/v1/me/player",{
-    method: "GET", headers: { Authorization: `Bearer ${token}`}
-  });
-  return await result.json();
-}
-
-async function fetchQueue(token){
-  const result = await fetch("https://api.spotify.com/v1/me/player/queue",{
-    method: "GET", headers: { Authorization: `Bearer ${token}`}
-  });
-  return await result.json();
-}
-
 function createCard(name, image, subtext, type){
   //create padding
   const outerPadding = document.createElement('div');
@@ -155,48 +137,48 @@ function createCard(name, image, subtext, type){
   document.getElementById(type_name).appendChild(outerPadding);
 }
 
-function createQueue(queue){
-  //create padding
-  const outerPadding = document.createElement('div');
-  outerPadding.className = "inline-block px-2";
+// function createQueue(queue){
+//   //create padding
+//   const outerPadding = document.createElement('div');
+//   outerPadding.className = "inline-block px-2";
 
-  for(let i of queue.queue){
-    //create card
-    let card = document.createElement("div");
-    card.style.backgroundColor = "#2a2a2a";
-    card.style.borderColor = "#121212";
+//   for(let i of queue.queue){
+//     //create card
+//     let card = document.createElement("div");
+//     card.style.backgroundColor = "#2a2a2a";
+//     card.style.borderColor = "#121212";
     
-    card.className = "w-64 max-w-xs rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out";
+//     card.className = "w-64 max-w-xs rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 ease-in-out";
     
-    //adding pictures to card
-    let picture = document.createElement("img");
-    picture.className = "rounded-t-lg";
-    picture.src = i.album.images[0];
-    card.appendChild(picture);
+//     //adding pictures to card
+//     let picture = document.createElement("img");
+//     picture.className = "rounded-t-lg";
+//     picture.src = i.album.images[0];
+//     card.appendChild(picture);
 
-    //creating space between picture and name
-    const innerPadding = document.createElement('div');
-    innerPadding.className = "p-3";
+//     //creating space between picture and name
+//     const innerPadding = document.createElement('div');
+//     innerPadding.className = "p-3";
 
-    //adding song name to card
-    let card_name = document.createElement("h5");
-    card_name.innerHTML = i.name;
-    card_name.className = "text-xl font-bold tracking-tight text-white";
-    innerPadding.appendChild(card_name);
+//     //adding song name to card
+//     let card_name = document.createElement("h5");
+//     card_name.innerHTML = i.name;
+//     card_name.className = "text-xl font-bold tracking-tight text-white";
+//     innerPadding.appendChild(card_name);
 
-    //adding artist to card
-    const cardSubtext = document.createElement('h5');
-    cardSubtext.innerHTML = "";
-    let names = i.artists.map(j => j.name).join(', ');
-    cardSubtext.innerHTML = names;
-    cardSubtext.style.color = "#727272"
-    cardSubtext.className = "mb-1 font-normal";
-    innerPadding.appendChild(cardSubtext);
-    card.appendChild(innerPadding);
-    outerPadding.appendChild(card);
-    document.getElementById("queue_cards").appendChild(outerPadding);
-  }
-}
+//     //adding artist to card
+//     const cardSubtext = document.createElement('h5');
+//     cardSubtext.innerHTML = "";
+//     let names = i.artists.map(j => j.name).join(', ');
+//     cardSubtext.innerHTML = names;
+//     cardSubtext.style.color = "#727272"
+//     cardSubtext.className = "mb-1 font-normal";
+//     innerPadding.appendChild(cardSubtext);
+//     card.appendChild(innerPadding);
+//     outerPadding.appendChild(card);
+//     document.getElementById("queue_cards").appendChild(outerPadding);
+//   }
+// }
 
 function convertFromMilliseconds(ms){
   let totSeconds = Math.floor(ms / 1000);
@@ -209,7 +191,7 @@ function convertFromMilliseconds(ms){
   }
 }
 
-function populateUI(profile, artists, tracks, player, queue) {
+function populateUI(profile, artists, tracks) {
   //create profile box
   if (profile.images[0]) {
     const img = document.createElement('img');
@@ -233,7 +215,7 @@ function populateUI(profile, artists, tracks, player, queue) {
   document.getElementById("profile-box").appendChild(profile_text);
 
   //queue
-  createQueue(queue);
+  //createQueue(queue);
 
   //artists
   let artist_name = [];
